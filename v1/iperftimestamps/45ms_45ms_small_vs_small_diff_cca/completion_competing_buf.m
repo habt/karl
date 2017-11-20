@@ -219,7 +219,7 @@ buff_labels={'BDP/2','BDP','2BDP','4BDP','8BDP'};
 group=[];
 lgd_str={};
 
-
+%{
 %scatter plot of two CCAs for all bw and all buff sizes(BDP,2BDP,4BDP)
 figure
 lgd_str={};
@@ -268,7 +268,7 @@ ylabel(cca_two,'FontSize',14);
 lgd=legend(lgd_str);
 lgd.FontSize=12;
 title(strcat(cca_one,'-',cca_two,'-',gap),'FontSize',12);
-
+%}
 
 
 %bar plot(buffer size) for completion time of a Single CCA(cubic) for all CCA combinations for all bw and all buff sizes(BDP,2BDP,4BDP)
@@ -292,7 +292,7 @@ for bw_idx = 1:1%length(bws)
                 elseif strcmp(cca_one,'reno')
                     cca_two=char('reno');
                     cca_one=cca_eval;
-                else
+                else %if cca_eval != bbr AND cca_one != reno (problem when cca_eval=cubic and cca_one=bbr)
                     cca_two=cca_eval;
                 end
                 dstr= char(strcat(cca_one,'-',cca_two,'-',bw,'-',buff,'-',lr,'-',sch,'-',exp,'-',gap));

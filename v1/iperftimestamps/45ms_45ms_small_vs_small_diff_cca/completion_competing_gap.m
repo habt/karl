@@ -286,18 +286,26 @@ for bw_idx = 2:2%length(bws)
     for buf_idx = 2:2%buffs_dim(2)
         buff=buffs(bw_idx,buf_idx);
         for cca1_idx =1:length(ccas)
-            cca_one=ccas(cca1_idx);
+            cca_noeval=ccas(cca1_idx);
             for spc_idx=1:6
-                gap=spacings(spc_idx);
-                               
+                gap=spacings(spc_idx);            
                 if strcmp(cca_eval,'bbr')
-                    cca_two=cca_one;
+                    cca_two=cca_noeval;
                     cca_one=cca_eval;
-                elseif strcmp(cca_one,'reno')
+                elseif strcmp(cca_eval,'cubic')
+                    if strcmp(cca_noeval,'bbr')
+                        cca_one=cca_noeval;
+                        cca_two=cca_eval;
+                    elseif strcmp(cca_one,'reno')
+                        cca_two=char('reno');
+                        cca_one=cca_eval;
+                    else
+                        cca_one=cca_eval;
+                        cca_two=cca_noeval;
+                    end
+                else %cca_eval='reno'
                     cca_two=char('reno');
                     cca_one=cca_eval;
-                else
-                    cca_two=cca_eval;
                 end
                 dstr= char(strcat(cca_one,'-',cca_two,'-',bw,'-',buff,'-',lr,'-',sch,'-',exp,'-',gap));
                 %dval=comp_time_mapobj_45ms_45ms_small_vs_small(dstr);
@@ -349,32 +357,32 @@ buf_idx = 2;%:4%buffs_dim(2)
 eval_allgap_1bw=zeros(1,length(spacings));
 cca_lines={'--','-',':'};
 for cca_idx =1:length(ccas)
-    cca_sec=ccas(cca_idx)
-    for bw_idx = 2:4 % only for 10,30 and 40 mbits
+    cca_noeval=ccas(cca_idx)
+    for bw_idx = 2:2 % only for 10,30 and 40 mbits
         bw=bws(bw_idx);
         buff=buffs(bw_idx,buf_idx);
         for spc_idx = 1:6%buffs_dim(2)
             gap=spacings(spc_idx); 
             if strcmp(cca_eval,'bbr')
-                cca_two=cca_sec;
+                cca_two=cca_noeval;
                 cca_one=cca_eval;
             elseif strcmp(cca_eval,'cubic')
-                if strcmp(cca_sec,'bbr')
-                    cca_one=cca_sec;
+                if strcmp(cca_noeval,'bbr')
+                    cca_one=cca_noeval;
                     cca_two=cca_eval;
                 elseif strcmp(cca_one,'reno')
                     cca_two=char('reno');
                     cca_one=cca_eval;
                 else
                     cca_one=cca_eval;
-                    cca_two=cca_sec;
+                    cca_two=cca_noeval;
                 end
             else %cca_eval=reno
-                cca_one=cca_sec;
+                cca_one=cca_noeval;
                 cca_two=cca_eval;
             end
-                dstr= char(strcat(cca_one,'-',cca_two,'-',bw,'-',buff,'-',lr,'-',sch,'-',exp,'-',gap));
-                dval=comp_time_mapobj_45ms_45ms_small_vs_small(dstr);
+            dstr= char(strcat(cca_one,'-',cca_two,'-',bw,'-',buff,'-',lr,'-',sch,'-',exp,'-',gap));
+            dval=comp_time_mapobj_45ms_45ms_small_vs_small(dstr);
 
             if strcmp(cca_one,cca_eval)
                 eval_allgap_1bw(1,spc_idx)=dval(1,:); %for all iterations buffer is always the same while bw changes
@@ -384,7 +392,7 @@ for cca_idx =1:length(ccas)
         end
         p=plot(eval_allgap_1bw,char(cca_lines(cca_idx)));
         %p.Marker=cca_lines(cca_idx);
-        lgd_str(end+1)=strcat(bw,'-vs ',cca_sec);
+        lgd_str(end+1)=strcat(bw,'-vs ',cca_noeval);
 
         hold on
     end
