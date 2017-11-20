@@ -287,12 +287,21 @@ for bw_idx = 1:1%length(bws)
                 %gap=spacings(spc_idx);
                                
                 if strcmp(cca_eval,'bbr')
-                    cca_two=cca_one;
+                    cca_two=cca_noeval;
                     cca_one=cca_eval;
+                elseif strcmp(cca_eval,'cubic')
+                if strcmp(cca_noeval,'bbr')
+                    cca_one=cca_noeval;
+                    cca_two=cca_eval;
                 elseif strcmp(cca_one,'reno')
                     cca_two=char('reno');
                     cca_one=cca_eval;
-                else %if cca_eval != bbr AND cca_one != reno (problem when cca_eval=cubic and cca_one= bbr or cubic)
+                else
+                    cca_one=cca_eval;
+                    cca_two=cca_noeval;
+                end
+                else %cca_eval=reno
+                    cca_one=cca_noeval;
                     cca_two=cca_eval;
                 end
                 dstr= char(strcat(cca_one,'-',cca_two,'-',bw,'-',buff,'-',lr,'-',sch,'-',exp,'-',gap));
