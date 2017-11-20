@@ -292,7 +292,7 @@ for bw_idx = 1:1%length(bws)
                 elseif strcmp(cca_one,'reno')
                     cca_two=char('reno');
                     cca_one=cca_eval;
-                else %if cca_eval != bbr AND cca_one != reno (problem when cca_eval=cubic and cca_one=bbr)
+                else %if cca_eval != bbr AND cca_one != reno (problem when cca_eval=cubic and cca_one= bbr or cubic)
                     cca_two=cca_eval;
                 end
                 dstr= char(strcat(cca_one,'-',cca_two,'-',bw,'-',buff,'-',lr,'-',sch,'-',exp,'-',gap));
