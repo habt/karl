@@ -282,7 +282,7 @@ for bw_idx = 1:1%length(bws)
     for buf_idx = 2:4%buffs_dim(2)
         buff=buffs(bw_idx,buf_idx);
         for cca1_idx =1:length(ccas)
-            cca_one=ccas(cca1_idx);
+            cca_noeval=ccas(cca1_idx);
             %for spc_idx=1:5
                 %gap=spacings(spc_idx);
                                
