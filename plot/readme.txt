@@ -1,1 +1,1 @@
-Contains dat read and plot scripts.
+Contains data read and plot scripts.
