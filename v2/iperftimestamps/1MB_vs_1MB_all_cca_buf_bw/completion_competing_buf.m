@@ -28,7 +28,7 @@ buff_markers={'o','s','d','p','h'};
 lrs={'0%perc'};
 schemes={'0.0'};%,'0.4','0.8'};%i.e. start delay of first small flow
 num_iter=10;
-spacings={'0.0gap','0.1gap'}%,'0.2gap','0.3gap','0.4gap','0.5gap'}
+spacings={'0.1gap'}%,'0.1gap'}%,'0.2gap','0.3gap','0.4gap','0.5gap'}
 
 exp_sizes={'1000000MB'};%reps 10,20
 sma_sizes={'1000000MB'}
@@ -330,7 +330,7 @@ title(strcat(cca_eval,'-',bw,'-',gap),'FontSize',12);
 figure
 lgd_str={};
 cca_eval=ccas(2);
-gap=spacings(2);
+gap=spacings(1);
 eval_allbw_1buf=zeros(1,length(bws)-1);% -1 to remove 5Mbps part
 eval_allbw_3buf=zeros(3,length(bws)-1);
 cca_lines={'--','-',':'};
@@ -387,7 +387,7 @@ for i=1:length(bws)
     temp=char(bws(i));
     alt_bws(i)=str2num(temp(1:end-4));
 end
-set(gca,'XTick',1:7,'XTicklabel',alt_bws(1:8),'FontSize',24);
+set(gca,'XTick',1:8,'XTicklabel',alt_bws(1:8),'FontSize',24);
 %xlim([0 20]);%max 25 for 5mbit
 ylim([0 8]);%max 100 for 5mbit
 %lgd_str=buff_labels(2:4);
@@ -395,5 +395,31 @@ lgd=legend(lgd_str);%line plot
 %lgd=legend(ccas);
 lgd.FontSize=24;
 title(strcat(cca_eval,'-',lr,'-',sch,'-',exp,'-',gap),'FontSize',24);
+
+
+
+
+%Completion time of succesive flows of a selected CCA in one file
+sum_comp_time_medium=zeros(10,3);
+ccas={'bbr','cubic','reno'};
+cca_eval=ccas(2);
+drctry='files/';
+to_plot='cubic_1000000MB_45ms_reno_1000000MB_45ms_10mbit_160buf_0%perc_0.0_0.1gap_';
+for i=1:9
+      file_end= char(strcat(num2str(i),'_',cca_eval,'.dat'));
+      comp_time_medium=csvread(strcat(drctry,to_plot,file_end)); 
+      sum_comp_time_medium=sum_comp_time_medium+comp_time_medium;
+      sum_comp_time_medium=sum_comp_time_medium+comp_time_medium;
+      plot(comp_time_medium(:,3)-comp_time_medium(:,2));
+      hold on;
+end
+avg_comp_time_medium= sum_comp_time_medium./10;   
+size(comp_time_medium)
+figure
+bar(avg_comp_time_medium(:,3)-avg_comp_time_medium(:,2))
+ylabel({'Completion time(sec) of '},{cca_eval),'FontSize',32,'FontWeight','bold');
+xlabel('Small flow number','FontSize',32,'FontWeight','bold');
+set(gca,'FontSize',28);
+title(to_plot,'FontSize',28))
 
 
